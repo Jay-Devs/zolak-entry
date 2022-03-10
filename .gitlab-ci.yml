@@ -1,0 +1,43 @@
+stages:
+  - build and push
+  - run
+
+image: docker:20
+
+services:
+  - name: docker:20-dind
+
+build and push:
+  before_script:
+    - apk add --no-cache curl jq python3 py3-pip
+    - pip install awscli
+  only:
+    - dev
+  stage: build and push
+  tags:
+    - docker
+  script:
+    - docker build -t zolak-entry-backend .
+    - aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin $AWS_ECR
+    - docker tag zolak-entry-backend:latest $AWS_ECR/zolak-entry-backend:latest
+    - docker push $AWS_ECR/zolak-entry-backend:latest
+    - docker image rm $AWS_ECR/zolak-entry-backend:latest zolak-entry-backend:latest
+    - docker logout
+    - docker system prune -f && docker volume prune -f
+
+run:
+  only:
+    - dev
+  stage: run
+  tags:
+    - simple
+  before_script:
+    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )' 
+    - eval $(ssh-agent -s)
+    - echo "$ML_PEM" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $ZOLAK_HOST >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - ssh -o StrictHostKeyChecking=no ubuntu@$ZOLAK_HOST /opt/dockerapp/zolak-entry-backend/run.sh
