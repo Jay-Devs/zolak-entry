@@ -1,5 +1,5 @@
 const path = require('path');
-const autoload = require('fastify-autoload');
+const autoload = require('@fastify/autoload');
 const fp = require('fastify-plugin');
 
 require('module-alias/register');
