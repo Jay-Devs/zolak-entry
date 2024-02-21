@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
                     sh'''
-                        cat .env .env.$ENV_NAME > .intermediate.env
+                        cp .env.$ENV_NAME .intermediate.env
                         echo "# -- dynamic variables" >> .intermediate.env
                         mv .intermediate.env .env
                     '''
