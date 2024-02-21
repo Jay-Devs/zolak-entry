@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
                     sh'''
-                        cat .env .env.$ENV_NAME > .intermediate.env
+                        cp .env.$ENV_NAME .intermediate.env
                         echo "# -- dynamic variables" >> .intermediate.env
                         mv .intermediate.env .env
                     '''
@@ -51,7 +51,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry("$ECR_PROTOCOL$ECR", "$ECR_CREDENTIALS_ID") {
-                        image = docker.build("$IMG_NAME:$ENV_NAME-$BUILD_NUMBER", '--build-arg .')
+                        image = docker.build("$IMG_NAME:$ENV_NAME-$BUILD_NUMBER", '.')
                         image.push()
 
                         latest_tag = "$ENV_NAME-latest"
