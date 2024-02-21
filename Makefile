@@ -32,8 +32,6 @@ ps:
 		--env-file .env.$(ENV) \
 		ps
 
-
-
 stop:
 	docker compose \
 		--env-file .env.$(ENV) \
