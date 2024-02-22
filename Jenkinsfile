@@ -22,10 +22,10 @@ pipeline {
                         case 'main':
                             env.ENV_NAME = 'prod'
 
-                            env.ECR_HOST = 'nexus.jaydevs.com:8080'
+                            env.ECR_HOST = 'nexus.zolak.tech'
                             env.ECR = "$ECR_HOST/repository/docker"
-                            env.ECR_PROTOCOL = 'http://'
-                            env.ECR_CREDENTIALS_ID = 'nexus-credentials'
+                            env.ECR_PROTOCOL = 'https://'
+                            env.ECR_CREDENTIALS_ID = 'zolak-nexus-credentials'
 
                             env.BACKEND_PORT = 3111
 
