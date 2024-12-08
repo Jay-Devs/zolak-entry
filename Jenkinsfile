@@ -29,7 +29,7 @@ pipeline {
 
                             env.BACKEND_PORT = 3111
 
-                            env.TARGET_HOST = 'deployer@34.27.117.85'
+                            env.TARGET_HOST = 'deployer@34.57.143.24'
                             env.DEPLOYMENT_DIR = "/home/deployer/apps/entry/$ENV_NAME"
                             break
                     }
